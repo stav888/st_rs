@@ -316,251 +316,108 @@
             document.documentElement.style.setProperty('--accent', '#6366f1');
         }
 
-        // Repository data (extracted & cleaned from the live site)
-        let repos = [
-            {
-                id: 1,
-                name: "loopy",
-                owner: "Forward-Future",
-                stars: 2178,
-                description: "A library of practical AI-agent loops and an installable skill for finding, adapting, and designing repeatable agent workflows.",
-                category: "AI Agents & Coding Assistants",
-                language: "JavaScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/Forward-Future/loopy"
-            },
-            {
-                id: 2,
-                name: "exercises-dataset",
-                owner: "hasaneyldrm",
-                stars: 5194,
-                description: "A comprehensive dataset of 433 fitness exercises. Each entry includes name, category, target muscle group, equipment, instructions, thumbnail image, and animation video.",
-                category: "Other",
-                language: "HTML",
-                date: "Jun 30, 2026",
-                github: "https://github.com/hasaneyldrm/exercises-dataset"
-            },
-            {
-                id: 3,
-                name: "claude-repurpose",
-                owner: "AgriciDaniel",
-                stars: 82,
-                description: "Content Repurposing Engine for Claude Code. Turn 1 piece of content into 10+ platform-optimized posts for Twitter, LinkedIn, Instagram, Facebook, YouTube, Skool, Reddit, and newsletters.",
-                category: "AI Agents & Coding Assistants",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/AgriciDaniel/claude-repurpose"
-            },
-            {
-                id: 4,
-                name: "transformer-explainer",
-                owner: "poloclub",
-                stars: 8022,
-                description: "Transformer Explained Visually: Learn How LLM Transformer Models Work with Interactive Visualization.",
-                category: "LLM Tooling & Proxies",
-                language: "JavaScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/poloclub/transformer-explainer"
-            },
-            {
-                id: 5,
-                name: "cocoindex-code",
-                owner: "cocoindex-io",
-                stars: 2294,
-                description: "A super light-weight embedded code search engine CLI (AST based) that just works — saves 70% token and improves speed for coding agent.",
-                category: "AI Agents & Coding Assistants",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/cocoindex-io/cocoindex-code"
-            },
-            {
-                id: 6,
-                name: "omni-agent-skills",
-                owner: "exploreomni",
-                stars: 23,
-                description: "A collection of skills for working with Omni. These skills help AI agents understand and execute Omni workflows more effectively.",
-                category: "AI Agents & Coding Assistants",
-                language: "Python",
-                date: "Jun 28, 2026",
-                github: "https://github.com/exploreomni/omni-agent-skills"
-            },
-            {
-                id: 7,
-                name: "TradingAgents",
-                owner: "TauricResearch",
-                stars: 89873,
-                description: "TradingAgents: Multi-Agents LLM Financial Trading Framework. Research through position entry, ongoing management, to exit.",
-                category: "AI Finance & Trading",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/TauricResearch/TradingAgents"
-            },
-            {
-                id: 8,
-                name: "awesome-n8n-templates",
-                owner: "enescingoz",
-                stars: 23558,
-                description: "280+ free n8n automation templates — ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation.",
-                category: "RAG & Semantic Search",
-                language: "JavaScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/enescingoz/awesome-n8n-templates"
-            },
-            {
-                id: 9,
-                name: "chunkr",
-                owner: "lumina-ai-inc",
-                stars: 3855,
-                description: "Vision infrastructure to turn complex documents into RAG/LLM-ready data. High-quality chunking and extraction for production RAG pipelines.",
-                category: "RAG & Semantic Search",
-                language: "Rust",
-                date: "Jun 30, 2026",
-                github: "https://github.com/lumina-ai-inc/chunkr"
-            },
-            {
-                id: 10,
-                name: "nano-banana-pro-prompts-recommend-skill",
-                owner: "YouMind-OpenLab",
-                stars: 1728,
-                description: "AI skill for OpenClaw & Claude Code — recommend from 10000+ Nano Banana Pro (Gemini) image prompts. Smart search by use case, content remix, sample images.",
-                category: "LLM Tooling & Proxies",
-                language: "TypeScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill"
-            },
-            {
-                id: 11,
-                name: "CLIProxyAPI",
-                owner: "router-for-me",
-                stars: 38741,
-                description: "Wrap Antigravity, ChatGPT Codex, Claude Code, Grok Build as an OpenAI/Gemini/Claude/Codex compatible API service. Enjoy free Gemini 3.1 Pro, GPT 5.5, Grok 4.3, Claude through API.",
-                category: "LLM Tooling & Proxies",
-                language: "Go",
-                date: "Jun 30, 2026",
-                github: "https://github.com/router-for-me/CLIProxyAPI"
-            },
-            {
-                id: 12,
-                name: "9router",
-                owner: "decolua",
-                stars: 18882,
-                description: "Unlimited FREE AI coding. Connect Claude Code, Codex, Cursor, Cline, Copilot, Antigravity to FREE Claude/GPT/Gemini via 40+ providers. Auto-fallback, RTK -40% tokens.",
-                category: "LLM Tooling & Proxies",
-                language: "JavaScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/decolua/9router"
-            },
-            {
-                id: 13,
-                name: "PixelRAG",
-                owner: "StarTrail-org",
-                stars: 5683,
-                description: "The end of web parsing. The beginning of scalable pixel-native search. link: https://pixelrag.ai/",
-                category: "RAG & Semantic Search",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/StarTrail-org/PixelRAG"
-            },
-            {
-                id: 14,
-                name: "aider",
-                owner: "Aider-AI",
-                stars: 46858,
-                description: "aider is AI pair programming in your terminal. Edit code in your local git repo by chatting with the AI.",
-                category: "AI Agents & Coding Assistants",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/Aider-AI/aider"
-            },
-            {
-                id: 15,
-                name: "openinterpreter",
-                owner: "openinterpreter",
-                stars: 64184,
-                description: "A lightweight coding agent for open models like Deepseek, Kimi, and Qwen. Run code locally with natural language.",
-                category: "AI Agents & Coding Assistants",
-                language: "Rust",
-                date: "Jun 30, 2026",
-                github: "https://github.com/openinterpreter/open-interpreter"
-            },
-            {
-                id: 16,
-                name: "OpenAlice",
-                owner: "TraderAlice",
-                stars: 5727,
-                description: "Your one-person Wall Street. An AI trading agent covering equities, crypto, commodities, forex, and macro — from research through position entry, ongoing management, to exit.",
-                category: "AI Finance & Trading",
-                language: "TypeScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/TraderAlice/OpenAlice"
-            },
-            {
-                id: 17,
-                name: "Kronos",
-                owner: "shiyu-coder",
-                stars: 31593,
-                description: "Kronos: A Foundation Model for the Language of Financial Markets. State-of-the-art financial time series foundation model.",
-                category: "AI Finance & Trading",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/shiyu-coder/Kronos"
-            },
-            {
-                id: 18,
-                name: "prompts.chat",
-                owner: "f",
-                stars: 164546,
-                description: "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for complete privacy.",
-                category: "LLM Tooling & Proxies",
-                language: "HTML",
-                date: "Jun 30, 2026",
-                github: "https://github.com/f/awesome-chatgpt-prompts"
-            },
-            {
-                id: 19,
-                name: "ECC",
-                owner: "affaan-m",
-                stars: 223648,
-                description: "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Cursor and beyond.",
-                category: "AI Agents & Coding Assistants",
-                language: "JavaScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/affaan-m/ECC"
-            },
-            {
-                id: 20,
-                name: "hermes-desktop",
-                owner: "fathah",
-                stars: 12894,
-                description: "Desktop Companion for Hermes Agent. Beautiful desktop interface for advanced AI agent workflows and monitoring.",
-                category: "AI Agents & Coding Assistants",
-                language: "TypeScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/fathah/hermes-desktop"
-            },
-            {
-                id: 21,
-                name: "mlcourse.ai",
-                owner: "Yorko",
-                stars: 10648,
-                description: "Open Machine Learning Course. Theory, code, exercises, notes and progress tracking for the famous Machine Learning course.",
-                category: "Learning Resources",
-                language: "Python",
-                date: "Jun 30, 2026",
-                github: "https://github.com/Yorko/mlcourse.ai"
-            },
-            {
-                id: 22,
-                name: "freeCodeCamp",
-                owner: "freeCodeCamp",
-                stars: 450779,
-                description: "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.",
-                category: "Learning Resources",
-                language: "TypeScript",
-                date: "Jun 30, 2026",
-                github: "https://github.com/freeCodeCamp/freeCodeCamp"
+        // Live data from GitHub
+        let repos = [];
+
+        // Simple but effective categorization (matches the spirit of your original site)
+        function categorizeRepo(repo) {
+            const text = `${repo.name} ${repo.description || ''} ${repo.language || ''}`.toLowerCase();
+            
+            if (text.includes('rag') || text.includes('semantic search') || text.includes('chunk') || text.includes('vector') || text.includes('embedding')) {
+                return "RAG & Semantic Search";
             }
-        ]
+            if (text.includes('trading') || text.includes('finance') || text.includes('market') || text.includes('kronos') || text.includes('alice')) {
+                return "AI Finance & Trading";
+            }
+            if (text.includes('n8n') || text.includes('automation') || text.includes('workflow')) {
+                return "RAG & Semantic Search"; // or create "Automation" if you want
+            }
+            if (text.includes('agent') || text.includes('claude') || text.includes('coding') || text.includes('aider') || text.includes('interpreter') || text.includes('loop')) {
+                return "AI Agents & Coding Assistants";
+            }
+            if (text.includes('llm') || text.includes('transformer') || text.includes('prompt') || text.includes('chatgpt') || text.includes('groq') || text.includes('proxy')) {
+                return "LLM Tooling & Proxies";
+            }
+            if (text.includes('audio') || text.includes('sound') || text.includes('fingerprint')) {
+                return "Audio AI & Signal";
+            }
+            if (text.includes('ml') || text.includes('machine learning') || text.includes('course') || text.includes('tutorial') || text.includes('learning')) {
+                return "Learning Resources";
+            }
+            if (text.includes('streamlit') || text.includes('deploy') || text.includes('mlops')) {
+                return "MLOps & Deployment";
+            }
+            return "Other";
+        }
+
+        // Fetch all starred repos from GitHub (public data, no token needed)
+        async function fetchGitHubStars() {
+            const grid = document.getElementById('repo-grid');
+            grid.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-16 text-zinc-400">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl mb-4"></i>
+                    <p>Loading all your starred repositories from GitHub...</p>
+                </div>
+            `;
+
+            try {
+                let allRepos = [];
+                let page = 1;
+                const perPage = 100;
+
+                while (true) {
+                    const res = await fetch(`https://api.github.com/users/stav888/starred?per_page=${perPage}&page=${page}`);
+                    
+                    if (!res.ok) {
+                        throw new Error(`GitHub API error: ${res.status}`);
+                    }
+                    
+                    const data = await res.json();
+                    if (data.length === 0) break;
+
+                    allRepos = allRepos.concat(data);
+                    if (data.length < perPage) break;
+                    page++;
+                }
+
+                // Map GitHub response to our card format
+                repos = allRepos.map((item, index) => ({
+                    id: index + 1,
+                    name: item.name,
+                    owner: item.owner.login,
+                    stars: item.stargazers_count,
+                    description: item.description || "No description provided.",
+                    category: categorizeRepo(item),
+                    language: item.language || "N/A",
+                    date: new Date(item.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                    github: item.html_url
+                }));
+
+                // Update dynamic stats
+                updateStats(allRepos);
+
+                return repos;
+
+            } catch (error) {
+                console.error("Failed to fetch GitHub stars:", error);
+                document.getElementById('repo-grid').innerHTML = `
+                    <div class="col-span-full text-center py-12 text-red-400">
+                        <i class="fa-solid fa-exclamation-triangle text-3xl mb-3"></i>
+                        <p>Could not load stars from GitHub.<br>Please check your connection or try again later.</p>
+                        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-zinc-800 rounded-2xl text-sm">Retry</button>
+                    </div>
+                `;
+                return [];
+            }
+        }
+
+        function updateStats(allGitHubRepos) {
+            // Total stars
+            const totalEl = document.querySelector('.stat-value');
+            if (totalEl) totalEl.textContent = allGitHubRepos.length;
+
+            // You can expand this to calculate top language etc. if wanted
+        }
 
         let currentFilter = {
             search: '',
@@ -849,39 +706,42 @@
         }
 
         // Refresh simulation
-        function refreshData() {
-            const btns = document.querySelectorAll('button')
-            const originalTexts = []
+        async function refreshData() {
+            const refreshBtns = Array.from(document.querySelectorAll('button')).filter(btn => 
+                btn.innerText.toLowerCase().includes('refresh') || btn.innerHTML.includes('sync')
+            );
             
-            // Visual feedback
-            btns.forEach((btn, i) => {
-                if (btn.innerText.includes('Refresh')) {
-                    originalTexts[i] = btn.innerHTML
-                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span class="hidden sm:inline">Syncing...</span>`
-                    btn.disabled = true
-                }
-            })
-            
-            setTimeout(() => {
+            // Visual feedback on refresh buttons
+            const originalHTMLs = refreshBtns.map(btn => btn.innerHTML);
+            refreshBtns.forEach(btn => {
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span class="hidden sm:inline">Syncing...</span>`;
+                btn.disabled = true;
+            });
+
+            try {
+                // Actually fetch fresh data from GitHub
+                await fetchGitHubStars();
+
+                // Re-render UI with new data
+                renderRepos(repos);
+                renderCategoryPills();
+
                 // Update last sync time
-                const syncEl = document.getElementById('last-sync-time')
-                syncEl.textContent = 'just now'
-                
-                // Re-render everything (simulates fresh data from GitHub)
-                renderRepos(repos)
-                renderCategoryPills()
-                
-                // Toast notification
-                showToast('Successfully synced with GitHub!', 'success')
-                
+                const syncEl = document.getElementById('last-sync-time');
+                if (syncEl) syncEl.textContent = 'just now';
+
+                showToast('Successfully synced with GitHub! All stars updated.', 'success');
+
+            } catch (err) {
+                showToast('Failed to refresh from GitHub', 'error');
+                console.error(err);
+            } finally {
                 // Restore buttons
-                btns.forEach((btn, i) => {
-                    if (btn.innerHTML.includes('Syncing')) {
-                        btn.innerHTML = originalTexts[i] || `<i class="fa-solid fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>`
-                        btn.disabled = false
-                    }
-                })
-            }, 850)
+                refreshBtns.forEach((btn, i) => {
+                    btn.innerHTML = originalHTMLs[i] || `<i class="fa-solid fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>`;
+                    btn.disabled = false;
+                });
+            }
         }
 
         function showToast(message, type = 'success') {
@@ -929,17 +789,20 @@
         }
 
         // Initialize everything
-        function initializeApp() {
+        async function initializeApp() {
             initializeTailwind()
-            
-            // Initial render
-            renderRepos(repos)
-            renderCategoryPills()
             
             // Set initial last sync time
             const syncEl = document.getElementById('last-sync-time')
             syncEl.textContent = 'just now'
-            
+
+            // Fetch live data from GitHub (this will populate the global `repos` array)
+            await fetchGitHubStars()
+
+            // Now render everything with the real data
+            renderRepos(repos)
+            renderCategoryPills()
+
             // Bonus: allow pressing Escape to close modal
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
@@ -947,7 +810,6 @@
                     if (!modal.classList.contains('hidden')) {
                         closeModal()
                     } else {
-                        // Clear search on escape if no modal
                         const input = document.getElementById('search-input')
                         if (input.value) {
                             input.value = ''
@@ -962,11 +824,7 @@
                 }
             })
             
-            // Make whole page show hint for / search
-            console.log('%c[Stars Unifier] Press "/" to focus search. All features are fully functional.', 'color:#3f3f46')
-            
-            // Optional: pre-filter demo (commented)
-            // setTimeout(() => { document.getElementById('search-input').value = 'rag'; filterRepos() }, 1200)
+            console.log('%c[Stars Unifier] Live data loaded from GitHub. All 100+ stars should now appear. Press "/" to focus search.', 'color:#3f3f46')
         }
 
         // Boot the app
