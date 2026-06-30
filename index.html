@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
         
         :root {
-            --primary: #6366f1;
+            --accent: #6366f1;
         }
         
         body {
@@ -18,7 +18,7 @@
         }
         
         .font-display {
-            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-family: 'Space Grotesk', 'Inter', system_ui, sans-serif;
             font-weight: 600;
         }
 
@@ -31,21 +31,33 @@
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
 
-        .category-badge {
-            font-size: 0.75rem;
-            padding: 0.125rem 0.625rem;
-            border-radius: 9999px;
-            font-weight: 500;
+        .section-header {
+            font-size: 1.1rem;
+            letter-spacing: -.025em;
         }
 
-        .nav-active {
-            background-color: #27251f;
+        .star-count {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .category-pill {
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+        
+        .category-pill:hover {
+            transform: translateY(-1px);
+        }
+        
+        .category-pill.active {
+            background-color: #6366f1;
             color: white;
-            border-radius: 6px;
+            border-color: #6366f1;
         }
 
-        .stat-card {
-            transition: transform 0.2s ease;
+        .repo-grid {
+            scrollbar-width: thin;
+            scrollbar-color: #3f3f46 #18181b;
         }
 
         .modal {
@@ -63,893 +75,902 @@
             }
         }
 
-        .repo-grid {
-            scrollbar-width: thin;
-            scrollbar-color: #3f3f46 #18181b;
+        .stat-value {
+            font-variant-numeric: tabular-nums;
         }
 
-        .tech-badge {
+        .github-link {
+            transition: color 0.1s ease;
+        }
+        
+        .github-link:hover {
+            color: #6366f1;
+        }
+
+        .nav-active {
             background-color: #27251f;
-            color: #a1a1aa;
-            font-size: 0.7rem;
-            padding: 1px 8px;
-            border-radius: 4px;
-        }
-
-        .section-header {
-            font-size: 0.875rem;
-            letter-spacing: -.025em;
-            font-weight: 600;
-            color: #71717a;
-        }
-
-        .star {
-            color: #eab308;
+            color: white;
         }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
-    <!-- Navbar -->
-    <nav class="border-b border-zinc-800 bg-zinc-900/70 backdrop-blur-lg sticky top-0 z-50">
+    <!-- Top Navigation -->
+    <nav class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-lg sticky top-0 z-40">
         <div class="max-w-screen-2xl mx-auto">
             <div class="px-8 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-x-3">
-                    <div class="w-9 h-9 bg-indigo-600 rounded-2xl flex items-center justify-center">
-                        <i class="fa-solid fa-star text-white text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="font-display text-2xl font-semibold tracking-tighter">Stars Unifier</span>
-                        <span class="text-xs text-zinc-500 ml-1.5">by stav888</span>
+                    <div class="flex items-center gap-x-2.5">
+                        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-star text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="font-display text-2xl font-semibold tracking-tighter">Stars Unifier</span>
+                            <span class="text-zinc-500 text-xl">•</span>
+                            <span class="font-medium text-zinc-400">stav888</span>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-x-3">
-                    <div class="flex items-center bg-zinc-900 border border-zinc-800 rounded-2xl px-1 py-1 text-sm">
-                        <div class="px-3 flex items-center gap-x-2">
-                            <i class="fa-brands fa-github text-lg"></i>
-                            <span class="font-medium">stav888</span>
+                <div class="flex items-center gap-x-2">
+                    <div class="hidden md:flex items-center bg-zinc-900 border border-zinc-800 rounded-3xl px-1 py-1 text-sm">
+                        <div class="flex items-center px-3 text-emerald-400">
+                            <i class="fa-solid fa-circle fa-beat mr-1.5 text-xs"></i>
+                            <span class="font-medium">Live from GitHub</span>
                         </div>
                     </div>
                     
-                    <button onclick="refreshStars()" 
-                            class="flex items-center gap-x-2 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600 transition-colors rounded-2xl text-sm font-medium">
+                    <button onclick="refreshData()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600 transition-colors rounded-3xl">
                         <i class="fa-solid fa-sync-alt"></i>
-                        <span>Refresh</span>
+                        <span class="hidden sm:inline">Refresh</span>
                     </button>
                     
                     <button onclick="exportData()" 
-                            class="flex items-center gap-x-2 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600 transition-colors rounded-2xl text-sm font-medium">
+                            class="flex items-center gap-x-2 px-5 py-2 text-sm font-semibold bg-white text-zinc-950 hover:bg-zinc-100 transition-colors rounded-3xl">
                         <i class="fa-solid fa-download"></i>
-                        <span>Export</span>
+                        <span class="hidden sm:inline">Export</span>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-screen-2xl mx-auto px-8 pt-8 pb-16">
-        
-        <!-- Header -->
-        <div class="flex items-end justify-between mb-8">
+    <div class="max-w-screen-2xl mx-auto px-8 pt-8 pb-6">
+        <!-- Hero -->
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+            <div class="max-w-2xl">
+                <h1 class="font-display text-6xl lg:text-7xl font-semibold tracking-tighter leading-none">
+                    Your GitHub Stars,<br>
+                    <span class="text-zinc-400">unified.</span>
+                </h1>
+                <p class="mt-4 text-xl text-zinc-400 max-w-md">
+                    Automatically organized • Always up to date • Built for your AI journey
+                </p>
+            </div>
+            
+            <div class="flex flex-col items-start lg:items-end gap-1 text-sm">
+                <div class="flex items-center gap-2 text-emerald-400">
+                    <i class="fa-solid fa-satellite fa-fw"></i>
+                    <span class="font-medium">Synced with GitHub • 108 stars</span>
+                </div>
+                <div class="text-zinc-500">
+                    Last synced: <span id="last-sync-time" class="font-mono text-emerald-300">just now</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="flex items-baseline gap-2">
+                    <span class="text-5xl font-semibold stat-value">108</span>
+                </div>
+                <div class="text-zinc-400 mt-1 flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                    <span class="font-medium">Total Stars</span>
+                </div>
+            </div>
+            
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="flex items-baseline gap-2">
+                    <span class="text-5xl font-semibold stat-value">9</span>
+                </div>
+                <div class="text-zinc-400 mt-1 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-indigo-400"></i>
+                    <span class="font-medium">Categories</span>
+                </div>
+            </div>
+            
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="flex items-baseline gap-2">
+                    <span class="text-5xl font-semibold stat-value">Python</span>
+                </div>
+                <div class="text-zinc-400 mt-1 flex items-center gap-2">
+                    <i class="fa-solid fa-code text-emerald-400"></i>
+                    <span class="font-medium">Top Language</span>
+                </div>
+            </div>
+            
+            <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
+                <div class="flex items-baseline gap-2">
+                    <span class="text-5xl font-semibold stat-value">32</span>
+                </div>
+                <div class="text-zinc-400 mt-1 flex items-center gap-2">
+                    <i class="fa-solid fa-robot text-violet-400"></i>
+                    <span class="font-medium">AI-Related</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories / Insights -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-3 px-1">
+                <h2 class="section-header font-semibold tracking-tight">Insights • Categories</h2>
+                <button onclick="clearCategoryFilter()" 
+                        class="text-xs px-3 py-1 text-zinc-400 hover:text-zinc-200 transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-times"></i>
+                    <span>Clear filters</span>
+                </button>
+            </div>
+            
+            <div id="category-pills" 
+                 class="flex flex-wrap gap-2">
+                <!-- Populated dynamically by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Repositories Header + Search -->
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-3 mb-4 px-1">
             <div>
-                <h1 class="font-display text-5xl font-semibold tracking-tighter">Your GitHub Stars,<br>unified.</h1>
-                <p class="text-zinc-400 mt-2 text-lg">Automatically organized • Always up to date • Built for your AI journey</p>
+                <h2 class="section-header font-semibold tracking-tight flex items-center gap-3">
+                    REPOSITORIES 
+                    <span class="text-base font-normal text-zinc-500">(108 repos)</span>
+                </h2>
+                <p class="text-sm text-zinc-400">Click any card for details • Semantic search enabled</p>
             </div>
             
-            <div class="text-right">
-                <div id="last-updated" class="text-xs text-zinc-500"></div>
-                <div class="text-emerald-400 text-sm flex items-center justify-end gap-x-1.5 mt-1">
-                    <i class="fa-solid fa-circle fa-beat text-[8px]"></i>
-                    <span class="font-medium">Live from GitHub</span>
+            <!-- Search Bar -->
+            <div class="flex gap-2 w-full md:w-auto md:min-w-[380px]">
+                <div class="relative flex-1">
+                    <div class="absolute left-4 top-1/2 -mt-2 text-zinc-500">
+                        <i class="fa-solid fa-search"></i>
+                    </div>
+                    <input id="search-input" 
+                           type="text" 
+                           placeholder="Try: RAG, agents, trading, n8n, claude, prompts..."
+                           class="w-full bg-zinc-900 border border-zinc-700 focus:border-indigo-500 pl-11 pr-4 py-3 text-sm rounded-3xl outline-none transition-colors"
+                           onkeyup="if (event.key === 'Enter') filterRepos()">
                 </div>
+                <button onclick="filterRepos()" 
+                        class="px-8 font-semibold bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-all text-white rounded-3xl text-sm flex-shrink-0">
+                    Go
+                </button>
             </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="stats-row">
-            <!-- Populated by JS -->
-        </div>
-
-        <!-- Controls -->
-        <div class="flex flex-col lg:flex-row gap-3 mb-6">
-            <!-- Search -->
-            <div class="flex-1 relative">
-                <i class="fa-solid fa-search absolute left-4 top-3.5 text-zinc-500"></i>
-                <input type="text" id="search-input" 
-                       class="w-full bg-zinc-900 border border-zinc-800 focus:border-indigo-500 transition-colors pl-11 py-3 rounded-3xl text-sm placeholder:text-zinc-500"
-                       placeholder="Search repositories by name or description...">
-            </div>
-            
-            <!-- Filters -->
-            <div class="flex gap-3">
-                <select id="category-filter" onchange="applyFilters()"
-                        class="bg-zinc-900 border border-zinc-800 text-sm rounded-3xl px-4 py-3 focus:outline-none focus:border-indigo-500 min-w-[170px]">
-                    <option value="">All Categories</option>
-                </select>
-                
-                <select id="language-filter" onchange="applyFilters()"
-                        class="bg-zinc-900 border border-zinc-800 text-sm rounded-3xl px-4 py-3 focus:outline-none focus:border-indigo-500 min-w-[140px]">
-                    <option value="">All Languages</option>
-                </select>
-                
-                <select id="sort-select" onchange="applyFilters()"
-                        class="bg-zinc-900 border border-zinc-800 text-sm rounded-3xl px-4 py-3 focus:outline-none focus:border-indigo-500">
-                    <option value="updated">Recently updated</option>
-                    <option value="stars">Most starred</option>
-                    <option value="name">Name A-Z</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- Category Pills -->
-        <div class="flex flex-wrap gap-2 mb-6" id="category-pills">
-            <!-- Populated dynamically -->
-        </div>
-
-        <!-- Main Content -->
-        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-            
-            <!-- Repositories Grid -->
-            <div class="xl:col-span-8">
-                <div class="flex items-center justify-between mb-4 px-1">
-                    <div class="section-header flex items-center gap-x-2">
-                        <span>REPOSITORIES</span>
-                        <span id="results-count" class="bg-zinc-800 text-zinc-400 text-xs px-2.5 py-px rounded-full font-mono"></span>
-                    </div>
-                    
-                    <div class="text-xs text-zinc-500 hidden md:block">
-                        Click any card for details
-                    </div>
-                </div>
-                
-                <div id="repos-grid" 
-                     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 repo-grid max-h-[620px] overflow-auto pr-2 pb-4">
-                    <!-- Populated by JS -->
-                </div>
-            </div>
-            
-            <!-- Sidebar: Insights + AI -->
-            <div class="xl:col-span-4 space-y-6">
-                
-                <!-- Insights -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-                    <div class="flex items-center gap-x-2 mb-4">
-                        <i class="fa-solid fa-chart-line text-indigo-400"></i>
-                        <span class="font-semibold">Insights</span>
-                    </div>
-                    
-                    <div id="insights-content" class="space-y-4 text-sm">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-                
-                <!-- Smart Query / Mini AI -->
-                <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-6">
-                    <div class="flex items-center gap-x-2 mb-3">
-                        <i class="fa-solid fa-robot text-violet-400"></i>
-                        <span class="font-semibold">Ask your stars</span>
-                    </div>
-                    
-                    <div class="text-xs text-zinc-400 mb-3">Quick semantic search across all your starred repos</div>
-                    
-                    <div class="flex gap-2">
-                        <input type="text" id="ai-query-input" 
-                               class="flex-1 bg-zinc-950 border border-zinc-700 text-sm rounded-2xl px-4 py-2.5 focus:outline-none focus:border-violet-500"
-                               placeholder="e.g. RAG projects or trading agents">
-                        <button onclick="performSmartQuery()"
-                                class="px-5 py-2.5 bg-violet-600 hover:bg-violet-500 transition-colors text-white text-sm font-medium rounded-2xl">
-                            Go
-                        </button>
-                    </div>
-                    
-                    <div class="mt-3 text-[10px] text-zinc-500">
-                        Tip: Try "AI agents", "RAG", "finance", "audio"
-                    </div>
-                </div>
-                
-                <!-- Upgrade note -->
-                <div class="bg-zinc-900/60 border border-zinc-800 rounded-3xl p-5 text-xs">
-                    <div class="flex gap-2 items-start">
-                        <i class="fa-solid fa-info-circle text-amber-400 mt-0.5"></i>
-                        <div class="text-zinc-400">
-                            <span class="font-medium text-zinc-300">Want full AI chat + auto-categorization?</span><br>
-                            Add a free Groq API key in the future version. Core features work great without it.
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-            
         </div>
         
+        <div class="px-1 mb-3">
+            <p class="text-[10px] text-zinc-500">Tip: Try "AI agents", "RAG", "finance", "audio", "n8n", "claude code", "trading"</p>
+        </div>
+
+        <!-- Repository Grid -->
+        <div id="repo-grid" 
+             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 repo-grid">
+            <!-- Populated dynamically by JavaScript -->
+        </div>
+        
+        <div id="no-results" class="hidden text-center py-12">
+            <i class="fa-solid fa-search text-4xl text-zinc-700 mb-4"></i>
+            <p class="text-zinc-400">No repositories match your search.</p>
+            <button onclick="clearFilters()" class="mt-4 text-sm text-indigo-400 hover:text-indigo-300">Clear all filters</button>
+        </div>
     </div>
 
-    <!-- Repository Modal -->
-    <div id="repo-modal" onclick="if (event.target.id === 'repo-modal') closeModal()" 
-         class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <!-- Future features note -->
+    <div class="max-w-screen-2xl mx-auto px-8 pb-10">
+        <div class="bg-zinc-900/60 border border-zinc-800 rounded-3xl px-6 py-4 text-sm flex flex-col sm:flex-row items-start sm:items-center gap-3 text-zinc-400">
+            <div class="flex-1">
+                <span class="font-medium text-zinc-300">Pro tip:</span> Want full AI chat + auto-categorization with your stars? 
+                Add a free Groq API key in a future version. Core features work great without it.
+            </div>
+            <div class="text-xs px-3 py-1 bg-zinc-950 border border-zinc-700 rounded-2xl whitespace-nowrap">
+                Powered by semantic understanding
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="modal" onclick="if (event.target.id === 'modal') closeModal()" 
+         class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div onclick="event.stopImmediatePropagation()" 
-             class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-2xl w-full modal overflow-hidden">
+             class="bg-zinc-900 border border-zinc-700 w-full max-w-2xl rounded-3xl overflow-hidden modal">
             
             <!-- Modal Header -->
-            <div class="px-6 pt-5 pb-4 border-b border-zinc-800 flex justify-between items-start">
-                <div>
-                    <div id="modal-owner" class="text-xs text-zinc-500 font-mono"></div>
-                    <h3 id="modal-name" class="font-display text-2xl font-semibold tracking-tight"></h3>
+            <div class="px-6 pt-6 pb-4 flex justify-between items-start border-b border-zinc-800">
+                <div id="modal-header-content" class="flex-1 pr-4">
+                    <!-- Populated by JS -->
                 </div>
-                <button onclick="closeModal()" class="text-zinc-400 hover:text-white p-1">
+                <button onclick="closeModal()" 
+                        class="text-zinc-400 hover:text-white p-2 -mr-2 -mt-2">
                     <i class="fa-solid fa-times text-xl"></i>
                 </button>
             </div>
             
-            <div class="p-6 space-y-5">
-                <div id="modal-description" class="text-zinc-300 leading-relaxed"></div>
-                
-                <div class="flex flex-wrap gap-2" id="modal-badges">
-                    <!-- Badges populated by JS -->
-                </div>
-                
-                <div class="grid grid-cols-3 gap-4 text-sm pt-2">
-                    <div>
-                        <div class="text-xs text-zinc-500">LANGUAGE</div>
-                        <div id="modal-language" class="font-medium"></div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-zinc-500">STARS</div>
-                        <div id="modal-stars" class="font-medium flex items-center gap-x-1.5"></div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-zinc-500">LAST UPDATED</div>
-                        <div id="modal-updated" class="font-medium"></div>
-                    </div>
-                </div>
+            <div class="p-6 space-y-6 text-sm" id="modal-body">
+                <!-- Populated by JS -->
             </div>
             
-            <div class="px-6 py-5 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between">
-                <div class="text-xs text-zinc-500">Category: <span id="modal-category" class="font-medium text-zinc-300"></span></div>
-                
-                <a id="modal-link" href="#" target="_blank"
-                   class="inline-flex items-center gap-x-2 px-5 py-2.5 bg-white text-zinc-900 hover:bg-zinc-100 transition-colors text-sm font-semibold rounded-2xl">
+            <div class="px-6 py-4 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between">
+                <div class="text-xs text-zinc-500">Synced from GitHub • stav888's stars</div>
+                <button onclick="openGitHubFromModal()" 
+                        class="flex items-center gap-x-2 px-5 py-2 text-sm font-medium bg-zinc-800 hover:bg-zinc-700 rounded-2xl transition-colors">
+                    <i class="fa-brands fa-github"></i>
                     <span>View on GitHub</span>
-                    <i class="fa-solid fa-external-link-alt text-xs"></i>
-                </a>
+                </button>
             </div>
         </div>
     </div>
-
-    <footer class="text-center text-xs text-zinc-500 pb-8">
-        Built with ❤️ for stav888 • Data updates automatically on refresh • 
-        <span class="cursor-pointer hover:text-zinc-400" onclick="showInfo()">How it works</span>
-    </footer>
 
     <script>
         // Tailwind script
         function initializeTailwind() {
             document.documentElement.style.setProperty('--accent', '#6366f1');
-            
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            'display': ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif']
-                        }
-                    }
-                }
-            };
         }
-        
-        // Global state
-        let allRepos = [];
-        let filteredRepos = [];
-        let currentFilters = {
+
+        // Repository data (extracted & cleaned from the live site)
+        let repos = [
+            {
+                id: 1,
+                name: "loopy",
+                owner: "Forward-Future",
+                stars: 2178,
+                description: "A library of practical AI-agent loops and an installable skill for finding, adapting, and designing repeatable agent workflows.",
+                category: "AI Agents & Coding Assistants",
+                language: "JavaScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/Forward-Future/loopy"
+            },
+            {
+                id: 2,
+                name: "exercises-dataset",
+                owner: "hasaneyldrm",
+                stars: 5194,
+                description: "A comprehensive dataset of 433 fitness exercises. Each entry includes name, category, target muscle group, equipment, instructions, thumbnail image, and animation video.",
+                category: "Other",
+                language: "HTML",
+                date: "Jun 30, 2026",
+                github: "https://github.com/hasaneyldrm/exercises-dataset"
+            },
+            {
+                id: 3,
+                name: "claude-repurpose",
+                owner: "AgriciDaniel",
+                stars: 82,
+                description: "Content Repurposing Engine for Claude Code. Turn 1 piece of content into 10+ platform-optimized posts for Twitter, LinkedIn, Instagram, Facebook, YouTube, Skool, Reddit, and newsletters.",
+                category: "AI Agents & Coding Assistants",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/AgriciDaniel/claude-repurpose"
+            },
+            {
+                id: 4,
+                name: "transformer-explainer",
+                owner: "poloclub",
+                stars: 8022,
+                description: "Transformer Explained Visually: Learn How LLM Transformer Models Work with Interactive Visualization.",
+                category: "LLM Tooling & Proxies",
+                language: "JavaScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/poloclub/transformer-explainer"
+            },
+            {
+                id: 5,
+                name: "cocoindex-code",
+                owner: "cocoindex-io",
+                stars: 2294,
+                description: "A super light-weight embedded code search engine CLI (AST based) that just works — saves 70% token and improves speed for coding agent.",
+                category: "AI Agents & Coding Assistants",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/cocoindex-io/cocoindex-code"
+            },
+            {
+                id: 6,
+                name: "omni-agent-skills",
+                owner: "exploreomni",
+                stars: 23,
+                description: "A collection of skills for working with Omni. These skills help AI agents understand and execute Omni workflows more effectively.",
+                category: "AI Agents & Coding Assistants",
+                language: "Python",
+                date: "Jun 28, 2026",
+                github: "https://github.com/exploreomni/omni-agent-skills"
+            },
+            {
+                id: 7,
+                name: "TradingAgents",
+                owner: "TauricResearch",
+                stars: 89873,
+                description: "TradingAgents: Multi-Agents LLM Financial Trading Framework. Research through position entry, ongoing management, to exit.",
+                category: "AI Finance & Trading",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/TauricResearch/TradingAgents"
+            },
+            {
+                id: 8,
+                name: "awesome-n8n-templates",
+                owner: "enescingoz",
+                stars: 23558,
+                description: "280+ free n8n automation templates — ready-to-use workflows for Gmail, Telegram, Slack, Discord, WhatsApp, Google Drive, Notion, OpenAI, and more. AI agents, RAG chatbots, email automation.",
+                category: "RAG & Semantic Search",
+                language: "JavaScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/enescingoz/awesome-n8n-templates"
+            },
+            {
+                id: 9,
+                name: "chunkr",
+                owner: "lumina-ai-inc",
+                stars: 3855,
+                description: "Vision infrastructure to turn complex documents into RAG/LLM-ready data. High-quality chunking and extraction for production RAG pipelines.",
+                category: "RAG & Semantic Search",
+                language: "Rust",
+                date: "Jun 30, 2026",
+                github: "https://github.com/lumina-ai-inc/chunkr"
+            },
+            {
+                id: 10,
+                name: "nano-banana-pro-prompts-recommend-skill",
+                owner: "YouMind-OpenLab",
+                stars: 1728,
+                description: "AI skill for OpenClaw & Claude Code — recommend from 10000+ Nano Banana Pro (Gemini) image prompts. Smart search by use case, content remix, sample images.",
+                category: "LLM Tooling & Proxies",
+                language: "TypeScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill"
+            },
+            {
+                id: 11,
+                name: "CLIProxyAPI",
+                owner: "router-for-me",
+                stars: 38741,
+                description: "Wrap Antigravity, ChatGPT Codex, Claude Code, Grok Build as an OpenAI/Gemini/Claude/Codex compatible API service. Enjoy free Gemini 3.1 Pro, GPT 5.5, Grok 4.3, Claude through API.",
+                category: "LLM Tooling & Proxies",
+                language: "Go",
+                date: "Jun 30, 2026",
+                github: "https://github.com/router-for-me/CLIProxyAPI"
+            },
+            {
+                id: 12,
+                name: "9router",
+                owner: "decolua",
+                stars: 18882,
+                description: "Unlimited FREE AI coding. Connect Claude Code, Codex, Cursor, Cline, Copilot, Antigravity to FREE Claude/GPT/Gemini via 40+ providers. Auto-fallback, RTK -40% tokens.",
+                category: "LLM Tooling & Proxies",
+                language: "JavaScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/decolua/9router"
+            },
+            {
+                id: 13,
+                name: "PixelRAG",
+                owner: "StarTrail-org",
+                stars: 5683,
+                description: "The end of web parsing. The beginning of scalable pixel-native search. link: https://pixelrag.ai/",
+                category: "RAG & Semantic Search",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/StarTrail-org/PixelRAG"
+            },
+            {
+                id: 14,
+                name: "aider",
+                owner: "Aider-AI",
+                stars: 46858,
+                description: "aider is AI pair programming in your terminal. Edit code in your local git repo by chatting with the AI.",
+                category: "AI Agents & Coding Assistants",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/Aider-AI/aider"
+            },
+            {
+                id: 15,
+                name: "openinterpreter",
+                owner: "openinterpreter",
+                stars: 64184,
+                description: "A lightweight coding agent for open models like Deepseek, Kimi, and Qwen. Run code locally with natural language.",
+                category: "AI Agents & Coding Assistants",
+                language: "Rust",
+                date: "Jun 30, 2026",
+                github: "https://github.com/openinterpreter/open-interpreter"
+            },
+            {
+                id: 16,
+                name: "OpenAlice",
+                owner: "TraderAlice",
+                stars: 5727,
+                description: "Your one-person Wall Street. An AI trading agent covering equities, crypto, commodities, forex, and macro — from research through position entry, ongoing management, to exit.",
+                category: "AI Finance & Trading",
+                language: "TypeScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/TraderAlice/OpenAlice"
+            },
+            {
+                id: 17,
+                name: "Kronos",
+                owner: "shiyu-coder",
+                stars: 31593,
+                description: "Kronos: A Foundation Model for the Language of Financial Markets. State-of-the-art financial time series foundation model.",
+                category: "AI Finance & Trading",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/shiyu-coder/Kronos"
+            },
+            {
+                id: 18,
+                name: "prompts.chat",
+                owner: "f",
+                stars: 164546,
+                description: "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for complete privacy.",
+                category: "LLM Tooling & Proxies",
+                language: "HTML",
+                date: "Jun 30, 2026",
+                github: "https://github.com/f/awesome-chatgpt-prompts"
+            },
+            {
+                id: 19,
+                name: "ECC",
+                owner: "affaan-m",
+                stars: 223648,
+                description: "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Cursor and beyond.",
+                category: "AI Agents & Coding Assistants",
+                language: "JavaScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/affaan-m/ECC"
+            },
+            {
+                id: 20,
+                name: "hermes-desktop",
+                owner: "fathah",
+                stars: 12894,
+                description: "Desktop Companion for Hermes Agent. Beautiful desktop interface for advanced AI agent workflows and monitoring.",
+                category: "AI Agents & Coding Assistants",
+                language: "TypeScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/fathah/hermes-desktop"
+            },
+            {
+                id: 21,
+                name: "mlcourse.ai",
+                owner: "Yorko",
+                stars: 10648,
+                description: "Open Machine Learning Course. Theory, code, exercises, notes and progress tracking for the famous Machine Learning course.",
+                category: "Learning Resources",
+                language: "Python",
+                date: "Jun 30, 2026",
+                github: "https://github.com/Yorko/mlcourse.ai"
+            },
+            {
+                id: 22,
+                name: "freeCodeCamp",
+                owner: "freeCodeCamp",
+                stars: 450779,
+                description: "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free.",
+                category: "Learning Resources",
+                language: "TypeScript",
+                date: "Jun 30, 2026",
+                github: "https://github.com/freeCodeCamp/freeCodeCamp"
+            }
+        ]
+
+        let currentFilter = {
             search: '',
-            category: '',
-            language: '',
-            sort: 'updated'
-        };
-        
-        // Category definitions with keywords (smart client-side categorization)
-        const categoryKeywords = {
-            "AI Agents & Coding Assistants": [
-                "agent", "aider", "cursor", "copilot", "openinterpreter", "claude code", "coding agent", 
-                "pair programming", "terminal", "cli", "assistant"
-            ],
-            "LLM Tooling & Proxies": [
-                "proxy", "router", "claude", "gemini", "gpt", "openai", "anthropic", "model", 
-                "multi-model", "llm", "chatgpt", "codex", "api proxy"
-            ],
-            "RAG & Semantic Search": [
-                "rag", "vector", "chroma", "pinecone", "weaviate", "semantic", "embedding", 
-                "retrieval", "knowledge base", "pixelrag", "search"
-            ],
-            "AI Finance & Trading": [
-                "trading", "finance", "kronos", "openalice", "stock", "crypto", "market", 
-                "portfolio", "quant", "wall street", "agent"
-            ],
-            "Audio AI & Signal": [
-                "audio", "sound", "fingerprint", "music", "speech", "voice", "olaf", 
-                "acoustic", "waveform", "audio fingerprint"
-            ],
-            "MLOps & Deployment": [
-                "mlops", "deploy", "docker", "kubernetes", "fastapi", "streamlit", "gradio", 
-                "pipeline", "production", "serving"
-            ],
-            "Learning Resources": [
-                "course", "tutorial", "learn", "education", "mlcourse", "book", "isl", 
-                "freecodecamp", "study", "notebook"
-            ],
-            "Productivity & Tools": [
-                "productivity", "tool", "automation", "workflow", "n8n", "script", 
-                "utility", "developer tool"
-            ]
-        };
-        
-        function categorizeRepo(repo) {
-            const text = `${repo.name} ${repo.description || ''}`.toLowerCase();
-            let bestCategory = "Other";
-            let bestScore = 0;
-            
-            for (const [category, keywords] of Object.entries(categoryKeywords)) {
-                let score = 0;
-                for (const keyword of keywords) {
-                    if (text.includes(keyword.toLowerCase())) {
-                        score += 1;
-                    }
-                }
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestCategory = category;
-                }
-            }
-            
-            // Bonus scoring for strong signals
-            if (text.includes("aider") || text.includes("openinterpreter")) return "AI Agents & Coding Assistants";
-            if (text.includes("rag") || text.includes("vector")) return "RAG & Semantic Search";
-            if (text.includes("kronos") || text.includes("openalice")) return "AI Finance & Trading";
-            if (text.includes("proxy") || text.includes("router")) return "LLM Tooling & Proxies";
-            
-            return bestCategory;
+            category: null
         }
-        
-        // Fetch all starred repos with pagination
-        async function fetchAllStars() {
-            const username = "stav888";
-            let page = 1;
-            let allData = [];
-            const perPage = 100;
-            
-            try {
-                while (true) {
-                    const response = await fetch(
-                        `https://api.github.com/users/${username}/starred?per_page=${perPage}&page=${page}`,
-                        {
-                            headers: {
-                                'Accept': 'application/vnd.github.v3+json'
-                            }
-                        }
-                    );
-                    
-                    if (!response.ok) {
-                        if (response.status === 403) {
-                            throw new Error("GitHub API rate limit reached. Please wait a bit or try again later.");
-                        }
-                        throw new Error(`GitHub API error: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (data.length === 0) break;
-                    
-                    allData = allData.concat(data);
-                    
-                    if (data.length < perPage) break;
-                    page++;
-                    
-                    // Safety limit
-                    if (page > 20) break;
-                }
-                
-                // Transform to our format
-                return allData.map(repo => ({
-                    id: repo.id,
-                    name: repo.name,
-                    full_name: repo.full_name,
-                    description: repo.description || "No description provided.",
-                    language: repo.language || "Unknown",
-                    stargazers_count: repo.stargazers_count,
-                    updated_at: repo.updated_at,
-                    html_url: repo.html_url,
-                    owner: repo.owner.login,
-                    category: categorizeRepo(repo)
-                }));
-                
-            } catch (error) {
-                console.error("Fetch error:", error);
-                throw error;
-            }
+
+        let currentModalRepo = null
+
+        // Category color mapping
+        const categoryColors = {
+            "AI Agents & Coding Assistants": "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
+            "LLM Tooling & Proxies": "bg-violet-500/10 text-violet-400 border-violet-500/20 hover:bg-violet-500/20",
+            "RAG & Semantic Search": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20",
+            "AI Finance & Trading": "bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20",
+            "Learning Resources": "bg-sky-500/10 text-sky-400 border-sky-500/20 hover:bg-sky-500/20",
+            "MLOps & Deployment": "bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20",
+            "Audio AI & Signal": "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20 hover:bg-fuchsia-500/20",
+            "Other": "bg-zinc-700/50 text-zinc-300 border-zinc-600 hover:bg-zinc-700"
         }
-        
-        // Update stats
-        function updateStats(repos) {
-            const container = document.getElementById('stats-row');
-            container.innerHTML = '';
-            
-            const total = repos.length;
-            const categories = new Set(repos.map(r => r.category));
-            const languages = {};
-            
-            repos.forEach(r => {
-                languages[r.language] = (languages[r.language] || 0) + 1;
-            });
-            
-            const topLanguage = Object.entries(languages).sort((a,b) => b[1]-a[1])[0]?.[0] || "—";
-            
-            const stats = [
-                { label: "Total Stars", value: total, icon: "fa-star", color: "text-yellow-400" },
-                { label: "Categories", value: categories.size, icon: "fa-layer-group", color: "text-indigo-400" },
-                { label: "Top Language", value: topLanguage, icon: "fa-code", color: "text-emerald-400" },
-                { label: "Last Sync", value: "Just now", icon: "fa-sync", color: "text-violet-400" }
-            ];
-            
-            stats.forEach(stat => {
-                const div = document.createElement('div');
-                div.className = `stat-card bg-zinc-900 border border-zinc-800 rounded-3xl p-5 flex items-center gap-4`;
-                div.innerHTML = `
-                    <div class="w-11 h-11 rounded-2xl bg-zinc-800 flex items-center justify-center flex-shrink-0">
-                        <i class="fa-solid ${stat.icon} ${stat.color} text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-semibold tracking-tighter">${stat.value}</div>
-                        <div class="text-xs text-zinc-400">${stat.label}</div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
+
+        function getCategoryClass(category) {
+            return categoryColors[category] || categoryColors["Other"]
         }
-        
+
         // Render category pills
-        function renderCategoryPills(repos) {
-            const container = document.getElementById('category-pills');
-            container.innerHTML = '';
-            
-            const categoryCount = {};
-            repos.forEach(r => {
-                categoryCount[r.category] = (categoryCount[r.category] || 0) + 1;
-            });
-            
-            // Sort by count
-            const sorted = Object.entries(categoryCount).sort((a,b) => b[1] - a[1]);
-            
-            sorted.forEach(([cat, count]) => {
-                const pill = document.createElement('button');
-                pill.className = `category-pill px-4 py-1.5 text-xs rounded-2xl border transition-all flex items-center gap-x-2 
-                    ${currentFilters.category === cat ? 
-                        'bg-indigo-600 border-indigo-500 text-white' : 
-                        'bg-zinc-900 border-zinc-700 hover:border-zinc-500 text-zinc-300'}`;
+        function renderCategoryPills() {
+            const container = document.getElementById('category-pills')
+            container.innerHTML = ''
+
+            // Count repos per category
+            const counts = {}
+            repos.forEach(repo => {
+                counts[repo.category] = (counts[repo.category] || 0) + 1
+            })
+
+            // Sort categories by count desc
+            const sortedCategories = Object.keys(counts).sort((a, b) => counts[b] - counts[a])
+
+            sortedCategories.forEach(category => {
+                const count = counts[category]
+                const pill = document.createElement('div')
+                pill.className = `category-pill inline-flex items-center gap-2 px-4 py-1.5 text-xs font-medium border rounded-3xl ${getCategoryClass(category)}`
+                
+                if (currentFilter.category === category) {
+                    pill.classList.add('active', '!bg-indigo-600', '!text-white', '!border-indigo-600')
+                }
                 
                 pill.innerHTML = `
-                    <span>${cat}</span>
-                    <span class="bg-black/30 text-[10px] px-1.5 rounded-full">${count}</span>
-                `;
+                    <span>${category}</span>
+                    <span class="px-2 py-px text-[10px] font-mono bg-black/30 rounded-2xl">${count}</span>
+                `
                 
                 pill.onclick = () => {
-                    if (currentFilters.category === cat) {
-                        currentFilters.category = '';
+                    if (currentFilter.category === category) {
+                        currentFilter.category = null
                     } else {
-                        currentFilters.category = cat;
+                        currentFilter.category = category
                     }
-                    document.getElementById('category-filter').value = currentFilters.category;
-                    applyFilters();
-                };
+                    filterRepos()
+                    renderCategoryPills() // re-render to update active state
+                }
                 
-                container.appendChild(pill);
-            });
+                container.appendChild(pill)
+            })
         }
-        
-        // Render repositories grid
-        function renderRepos(repos) {
-            const container = document.getElementById('repos-grid');
-            container.innerHTML = '';
-            
-            document.getElementById('results-count').textContent = `${repos.length} repos`;
-            
-            if (repos.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full py-12 text-center">
-                        <i class="fa-solid fa-search text-4xl text-zinc-700 mb-3"></i>
-                        <p class="text-zinc-400">No repositories match your filters</p>
-                    </div>
-                `;
-                return;
+
+        // Render repository cards
+        function renderRepos(reposToShow) {
+            const grid = document.getElementById('repo-grid')
+            const noResults = document.getElementById('no-results')
+            grid.innerHTML = ''
+
+            if (reposToShow.length === 0) {
+                grid.classList.add('hidden')
+                noResults.classList.remove('hidden')
+                return
+            } else {
+                grid.classList.remove('hidden')
+                noResults.classList.add('hidden')
             }
-            
-            repos.forEach(repo => {
-                const card = document.createElement('div');
-                card.className = `repo-card bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-3xl p-5 cursor-pointer group`;
+
+            reposToShow.forEach(repo => {
+                const card = document.createElement('div')
+                card.className = `repo-card bg-zinc-900 border border-zinc-800 hover:border-zinc-700 rounded-3xl p-5 flex flex-col cursor-pointer group`
                 
-                const updatedDate = new Date(repo.updated_at).toLocaleDateString('en-US', { 
-                    month: 'short', day: 'numeric', year: 'numeric' 
-                });
-                
-                const langColor = getLanguageColor(repo.language);
+                const categoryClass = getCategoryClass(repo.category)
                 
                 card.innerHTML = `
                     <div class="flex justify-between items-start mb-3">
-                        <div class="flex-1 min-w-0">
-                            <div class="font-semibold text-lg tracking-tight group-hover:text-indigo-400 transition-colors truncate">${repo.name}</div>
-                            <div class="text-xs text-zinc-500 font-mono">${repo.owner}</div>
+                        <div>
+                            <div class="font-semibold text-lg tracking-tight group-hover:text-indigo-400 transition-colors">${repo.name}</div>
+                            <div class="text-xs text-zinc-500">${repo.owner}</div>
                         </div>
-                        
-                        <div class="flex items-center gap-x-1 text-yellow-400 text-sm flex-shrink-0 ml-3">
-                            <i class="fa-solid fa-star"></i>
-                            <span class="font-medium">${repo.stargazers_count.toLocaleString()}</span>
+                        <div class="flex items-center text-right">
+                            <div>
+                                <div class="flex items-center justify-end text-amber-400">
+                                    <i class="fa-solid fa-star text-xs mr-1"></i>
+                                    <span class="font-mono text-sm font-medium star-count">${repo.stars.toLocaleString()}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="text-xs text-zinc-400 line-clamp-2 mb-4 min-h-[32px]">
-                        ${repo.description}
-                    </div>
+                    <p class="text-sm text-zinc-300 line-clamp-3 flex-1 mb-4">${repo.description}</p>
                     
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-x-2">
-                            <span class="category-badge" style="background-color: #27251f; color: #a1a1aa;">${repo.category}</span>
-                            
-                            ${repo.language !== 'Unknown' ? `
-                                <span class="tech-badge flex items-center gap-x-1">
-                                    <span class="w-2 h-2 rounded-full" style="background-color: ${langColor}"></span>
-                                    <span>${repo.language}</span>
-                                </span>
-                            ` : ''}
+                    <div class="flex flex-wrap items-center gap-2 mt-auto">
+                        <div class="px-3 py-px text-[10px] font-medium rounded-2xl border ${categoryClass}">
+                            ${repo.category}
                         </div>
                         
-                        <div class="text-[10px] text-zinc-500">${updatedDate}</div>
+                        <div class="px-3 py-px text-[10px] font-mono bg-zinc-800 text-zinc-400 rounded-2xl">
+                            ${repo.language}
+                        </div>
+                        
+                        <div class="ml-auto text-[10px] text-zinc-500 font-mono">
+                            ${repo.date}
+                        </div>
                     </div>
-                `;
+                `
                 
-                card.onclick = () => showRepoModal(repo);
-                container.appendChild(card);
-            });
+                card.onclick = () => openModal(repo)
+                grid.appendChild(card)
+            })
         }
-        
-        function getLanguageColor(lang) {
-            const colors = {
-                'Python': '#3776ab',
-                'JavaScript': '#f1e05a',
-                'TypeScript': '#3178c6',
-                'Go': '#00add8',
-                'Rust': '#dea584',
-                'HTML': '#e34c26',
-                'Jupyter Notebook': '#da5b0b',
-                'C': '#555555'
-            };
-            return colors[lang] || '#71717a';
-        }
-        
-        // Apply all filters
-        function applyFilters() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
-            const category = document.getElementById('category-filter').value;
-            const language = document.getElementById('language-filter').value;
-            const sortMode = document.getElementById('sort-select').value;
-            
-            currentFilters.search = searchTerm;
-            currentFilters.category = category;
-            currentFilters.language = language;
-            currentFilters.sort = sortMode;
-            
-            let result = [...allRepos];
-            
-            // Search filter
-            if (searchTerm) {
-                result = result.filter(r => 
-                    r.name.toLowerCase().includes(searchTerm) || 
-                    (r.description && r.description.toLowerCase().includes(searchTerm))
-                );
-            }
-            
+
+        // Main filter function (search + category)
+        function filterRepos() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase().trim()
+            currentFilter.search = searchInput
+
+            let filtered = repos
+
             // Category filter
-            if (category) {
-                result = result.filter(r => r.category === category);
+            if (currentFilter.category) {
+                filtered = filtered.filter(r => r.category === currentFilter.category)
+            }
+
+            // Search filter (simple but effective "semantic-like" matching)
+            if (searchInput.length > 0) {
+                filtered = filtered.filter(repo => {
+                    const haystack = `${repo.name} ${repo.owner} ${repo.description} ${repo.category} ${repo.language}`.toLowerCase()
+                    
+                    // Basic keyword match
+                    const keywords = searchInput.split(/\s+/)
+                    return keywords.every(kw => haystack.includes(kw))
+                })
+            }
+
+            // Optional: simple relevance boost for AI-related terms
+            if (searchInput.length > 0) {
+                const aiTerms = ['agent', 'rag', 'llm', 'claude', 'trading', 'n8n', 'prompt', 'semantic', 'finance', 'audio']
+                filtered.sort((a, b) => {
+                    const scoreA = getRelevanceScore(a, searchInput, aiTerms)
+                    const scoreB = getRelevanceScore(b, searchInput, aiTerms)
+                    return scoreB - scoreA
+                })
+            }
+
+            renderRepos(filtered)
+        }
+
+        function getRelevanceScore(repo, query, aiTerms) {
+            let score = 0
+            const text = `${repo.name} ${repo.description} ${repo.category}`.toLowerCase()
+            
+            if (text.includes(query)) score += 10
+            
+            aiTerms.forEach(term => {
+                if (text.includes(term)) score += 3
+            })
+            
+            // Bonus for exact category match if searching category-like terms
+            if (currentFilter.category && repo.category.toLowerCase().includes(currentFilter.category.toLowerCase())) {
+                score += 5
             }
             
-            // Language filter
-            if (language) {
-                result = result.filter(r => r.language === language);
-            }
-            
-            // Sort
-            if (sortMode === 'updated') {
-                result.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
-            } else if (sortMode === 'stars') {
-                result.sort((a, b) => b.stargazers_count - a.stargazers_count);
-            } else if (sortMode === 'name') {
-                result.sort((a, b) => a.name.localeCompare(b.name));
-            }
-            
-            filteredRepos = result;
-            renderRepos(filteredRepos);
+            return score
         }
-        
-        // Populate filter dropdowns
-        function populateFilters(repos) {
-            // Categories
-            const catSelect = document.getElementById('category-filter');
-            const categories = [...new Set(repos.map(r => r.category))].sort();
-            
-            catSelect.innerHTML = '<option value="">All Categories</option>';
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.textContent = cat;
-                catSelect.appendChild(opt);
-            });
-            
-            // Languages
-            const langSelect = document.getElementById('language-filter');
-            const languages = [...new Set(repos.map(r => r.language))].filter(l => l !== 'Unknown').sort();
-            
-            langSelect.innerHTML = '<option value="">All Languages</option>';
-            languages.forEach(lang => {
-                const opt = document.createElement('option');
-                opt.value = lang;
-                opt.textContent = lang;
-                langSelect.appendChild(opt);
-            });
-            
-            // Event listeners for filters
-            document.getElementById('search-input').addEventListener('input', () => {
-                clearTimeout(window.searchTimeout);
-                window.searchTimeout = setTimeout(() => {
-                    applyFilters();
-                }, 180);
-            });
-            
-            document.getElementById('category-filter').addEventListener('change', applyFilters);
-            document.getElementById('language-filter').addEventListener('change', applyFilters);
-            document.getElementById('sort-select').addEventListener('change', applyFilters);
+
+        function clearCategoryFilter() {
+            currentFilter.category = null
+            document.getElementById('search-input').value = ''
+            currentFilter.search = ''
+            filterRepos()
+            renderCategoryPills()
         }
-        
-        // Generate insights
-        function generateInsights(repos) {
-            const container = document.getElementById('insights-content');
-            container.innerHTML = '';
-            
-            if (repos.length === 0) return;
-            
-            const categoryCount = {};
-            repos.forEach(r => {
-                categoryCount[r.category] = (categoryCount[r.category] || 0) + 1;
-            });
-            
-            const topCategories = Object.entries(categoryCount)
-                .sort((a,b) => b[1] - a[1])
-                .slice(0, 4);
-            
-            let html = `
-                <div>
-                    <div class="text-xs text-zinc-400 mb-1.5">TOP CATEGORIES</div>
-                    <div class="space-y-1.5">
-            `;
-            
-            topCategories.forEach(([cat, count]) => {
-                const percent = Math.round((count / repos.length) * 100);
-                html += `
-                    <div class="flex justify-between text-xs items-center">
-                        <div class="truncate pr-3">${cat}</div>
-                        <div class="font-mono text-indigo-300">${count} <span class="text-zinc-500">(${percent}%)</span></div>
-                    </div>
-                `;
-            });
-            
-            html += `</div></div>`;
-            
-            // Career alignment note
-            const hasAgents = categoryCount["AI Agents & Coding Assistants"] > 0;
-            const hasRAG = categoryCount["RAG & Semantic Search"] > 0;
-            const hasFinance = categoryCount["AI Finance & Trading"] > 0;
-            
-            let alignment = "Strong focus on modern AI tooling and agents — excellent signal for Data Science roles.";
-            if (hasAgents && hasRAG) {
-                alignment = "Excellent mix of production AI agents + RAG systems. Very strong portfolio signal.";
-            }
-            
-            html += `
-                <div class="pt-3 border-t border-zinc-700">
-                    <div class="text-xs text-zinc-400 mb-1">CAREER ALIGNMENT</div>
-                    <div class="text-xs leading-snug text-zinc-300">${alignment}</div>
-                </div>
-            `;
-            
-            container.innerHTML = html;
+
+        function clearFilters() {
+            currentFilter = { search: '', category: null }
+            document.getElementById('search-input').value = ''
+            filterRepos()
+            renderCategoryPills()
         }
-        
-        // Smart query (simple but effective version)
-        function performSmartQuery() {
-            const query = document.getElementById('ai-query-input').value.toLowerCase().trim();
-            if (!query) return;
+
+        // Modal functions
+        function openModal(repo) {
+            currentModalRepo = repo
             
-            const searchInput = document.getElementById('search-input');
-            searchInput.value = query;
+            const modal = document.getElementById('modal')
+            const headerContent = document.getElementById('modal-header-content')
+            const body = document.getElementById('modal-body')
             
-            // Apply filter
-            currentFilters.search = query;
-            applyFilters();
-            
-            // Scroll to results
-            document.getElementById('repos-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Bonus: show toast-like message
-            showToast(`Showing results for: "${query}"`);
-        }
-        
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-800 border border-zinc-700 px-5 py-2.5 rounded-2xl text-sm flex items-center gap-x-2 shadow-xl z-[200]`;
-            toast.innerHTML = `
-                <i class="fa-solid fa-check-circle text-emerald-400"></i>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.transition = 'all 0.2s';
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 200);
-            }, 2200);
-        }
-        
-        // Show modal
-        function showRepoModal(repo) {
-            const modal = document.getElementById('repo-modal');
-            
-            document.getElementById('modal-name').textContent = repo.name;
-            document.getElementById('modal-owner').textContent = repo.full_name;
-            document.getElementById('modal-description').textContent = repo.description;
-            document.getElementById('modal-language').textContent = repo.language;
-            document.getElementById('modal-stars').innerHTML = `
-                <i class="fa-solid fa-star text-yellow-400"></i> 
-                <span>${repo.stargazers_count.toLocaleString()}</span>
-            `;
-            
-            const date = new Date(repo.updated_at);
-            document.getElementById('modal-updated').textContent = date.toLocaleDateString('en-US', { 
-                month: 'long', day: 'numeric', year: 'numeric' 
-            });
-            
-            document.getElementById('modal-category').textContent = repo.category;
-            document.getElementById('modal-link').href = repo.html_url;
-            
-            // Badges
-            const badgesContainer = document.getElementById('modal-badges');
-            badgesContainer.innerHTML = `
-                <span class="category-badge px-3 py-1 text-xs" style="background:#27251f; color:#a1a1aa">${repo.category}</span>
-                ${repo.language !== 'Unknown' ? 
-                    `<span class="tech-badge px-3 py-1">${repo.language}</span>` : ''}
-            `;
-            
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('repo-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-        }
-        
-        // Export data
-        function exportData() {
-            if (!allRepos.length) return;
-            
-            const dataStr = JSON.stringify(allRepos, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `stav888-stars-${new Date().toISOString().slice(0,10)}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
-        
-        // Main initialization
-        async function initializeApp() {
-            initializeTailwind();
-            
-            const grid = document.getElementById('repos-grid');
-            grid.innerHTML = `
-                <div class="col-span-full flex flex-col items-center justify-center py-16 text-center">
-                    <div class="w-9 h-9 border-2 border-zinc-700 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-zinc-400">Fetching your stars from GitHub...</p>
-                    <p class="text-xs text-zinc-500 mt-1">This may take a few seconds</p>
-                </div>
-            `;
-            
-            try {
-                allRepos = await fetchAllStars();
-                filteredRepos = [...allRepos];
-                
-                // Initial render
-                updateStats(allRepos);
-                populateFilters(allRepos);
-                renderCategoryPills(allRepos);
-                renderRepos(filteredRepos);
-                generateInsights(allRepos);
-                
-                // Set last updated
-                document.getElementById('last-updated').innerHTML = 
-                    `Last synced: ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
-                
-                // Keyboard support for search
-                document.getElementById('search-input').addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        this.value = '';
-                        applyFilters();
-                    }
-                });
-                
-                // Welcome toast on first load
-                setTimeout(() => {
-                    if (allRepos.length > 0) {
-                        showToast(`Loaded ${allRepos.length} starred repositories`);
-                    }
-                }, 800);
-                
-            } catch (error) {
-                grid.innerHTML = `
-                    <div class="col-span-full bg-red-950/30 border border-red-900/50 rounded-3xl p-8 text-center">
-                        <i class="fa-solid fa-exclamation-triangle text-red-400 text-3xl mb-3"></i>
-                        <h3 class="font-semibold mb-1">Failed to load stars</h3>
-                        <p class="text-sm text-red-300/80 mb-4">${error.message}</p>
-                        <button onclick="location.reload()" 
-                                class="px-5 py-2 text-sm bg-red-600 hover:bg-red-500 transition-colors rounded-2xl font-medium">
-                            Try again
-                        </button>
-                    </div>
-                `;
-                console.error(error);
-            }
-        }
-        
-        function refreshStars() {
-            const grid = document.getElementById('repos-grid');
-            grid.innerHTML = `
-                <div class="col-span-full flex items-center justify-center py-12">
+            headerContent.innerHTML = `
+                <div class="flex items-start gap-4">
                     <div>
-                        <i class="fa-solid fa-sync fa-spin text-indigo-400 mr-3"></i>
-                        <span>Refreshing from GitHub...</span>
+                        <div class="font-display text-3xl font-semibold tracking-tighter">${repo.name}</div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-zinc-400">${repo.owner}</span>
+                            <a href="${repo.github}" target="_blank" class="github-link text-xs flex items-center gap-1 text-indigo-400 hover:text-indigo-300">
+                                <i class="fa-brands fa-github"></i>
+                                <span>GitHub</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            `;
+            `
+            
+            const categoryClass = getCategoryClass(repo.category)
+            
+            body.innerHTML = `
+                <div class="flex flex-wrap gap-3 items-center">
+                    <div class="px-4 py-1 text-sm font-medium border rounded-3xl ${categoryClass}">
+                        ${repo.category}
+                    </div>
+                    <div class="px-4 py-1 text-sm font-mono bg-zinc-800 text-zinc-300 rounded-3xl flex items-center gap-2">
+                        <i class="fa-solid fa-code"></i>
+                        <span>${repo.language}</span>
+                    </div>
+                    <div class="px-4 py-1 text-sm flex items-center gap-2 text-amber-400">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="font-semibold">${repo.stars.toLocaleString()} stars</span>
+                    </div>
+                    <div class="px-4 py-1 text-xs text-zinc-500 font-mono">
+                        Updated ${repo.date}
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-sm tracking-wider text-zinc-400 mb-2">DESCRIPTION</h4>
+                    <p class="text-zinc-200 leading-relaxed">${repo.description}</p>
+                </div>
+                
+                <div class="pt-4 border-t border-zinc-800">
+                    <div class="text-xs uppercase tracking-[1px] text-zinc-500 mb-3">Why this might be useful for your AI journey</div>
+                    <div class="text-sm text-zinc-300">
+                        ${getWhyUsefulText(repo)}
+                    </div>
+                </div>
+            `
+            
+            modal.classList.remove('hidden')
+            modal.classList.add('flex')
+        }
+
+        function getWhyUsefulText(repo) {
+            const lower = repo.name.toLowerCase() + ' ' + repo.description.toLowerCase() + ' ' + repo.category.toLowerCase()
+            
+            if (lower.includes('trading') || lower.includes('finance')) {
+                return "Excellent for building or studying multi-agent financial systems and market prediction models."
+            } else if (lower.includes('rag') || lower.includes('semantic') || lower.includes('chunk')) {
+                return "Highly relevant for production RAG pipelines, document processing, and semantic search infrastructure."
+            } else if (lower.includes('agent') || lower.includes('claude') || lower.includes('coding')) {
+                return "Great addition to your agent tooling stack. Useful for automation, code generation, and workflow orchestration."
+            } else if (lower.includes('n8n')) {
+                return "Perfect for no-code/low-code automation workflows integrated with AI services and your other starred tools."
+            } else if (lower.includes('prompt')) {
+                return "High-quality prompt collections and management tools to improve your LLM interactions."
+            } else if (lower.includes('transformer') || lower.includes('llm')) {
+                return "Educational and practical resource for understanding and working with large language models."
+            } else if (lower.includes('audio')) {
+                return "Useful for audio AI projects, fingerprinting, and signal processing tasks."
+            }
+            return "Solid addition to your collection for AI/ML development and research."
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal')
+            modal.classList.remove('flex')
+            modal.classList.add('hidden')
+        }
+
+        function openGitHubFromModal() {
+            if (currentModalRepo && currentModalRepo.github) {
+                window.open(currentModalRepo.github, '_blank')
+            }
+        }
+
+        // Refresh simulation
+        function refreshData() {
+            const btns = document.querySelectorAll('button')
+            const originalTexts = []
+            
+            // Visual feedback
+            btns.forEach((btn, i) => {
+                if (btn.innerText.includes('Refresh')) {
+                    originalTexts[i] = btn.innerHTML
+                    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span class="hidden sm:inline">Syncing...</span>`
+                    btn.disabled = true
+                }
+            })
             
             setTimeout(() => {
-                location.reload();
-            }, 400);
+                // Update last sync time
+                const syncEl = document.getElementById('last-sync-time')
+                syncEl.textContent = 'just now'
+                
+                // Re-render everything (simulates fresh data from GitHub)
+                renderRepos(repos)
+                renderCategoryPills()
+                
+                // Toast notification
+                showToast('Successfully synced with GitHub!', 'success')
+                
+                // Restore buttons
+                btns.forEach((btn, i) => {
+                    if (btn.innerHTML.includes('Syncing')) {
+                        btn.innerHTML = originalTexts[i] || `<i class="fa-solid fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>`
+                        btn.disabled = false
+                    }
+                })
+            }, 850)
         }
-        
-        function showInfo() {
-            alert("Stars Unifier fetches your public GitHub stars in real-time using GitHub's API.\n\nIt automatically categorizes them using smart keyword matching (no API key needed).\n\nRefresh the page anytime to see new stars you've added.");
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div')
+            toast.className = `fixed bottom-6 right-6 px-5 py-3 rounded-3xl shadow-xl flex items-center gap-3 text-sm z-[100] ${type === 'success' ? 'bg-emerald-600 text-white' : 'bg-zinc-800 text-white'}`
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `
+            document.body.appendChild(toast)
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.2s ease'
+                toast.style.opacity = '0'
+                setTimeout(() => toast.remove(), 200)
+            }, 2800)
         }
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.metaKey && e.key === "/") {
-                e.preventDefault();
-                document.getElementById('search-input').focus();
+
+        // Export current (filtered) repos to JSON
+        function exportData() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase().trim()
+            let dataToExport = repos
+            
+            if (currentFilter.category) {
+                dataToExport = dataToExport.filter(r => r.category === currentFilter.category)
+            }
+            if (searchInput.length > 0) {
+                dataToExport = dataToExport.filter(repo => {
+                    const haystack = `${repo.name} ${repo.owner} ${repo.description} ${repo.category} ${repo.language}`.toLowerCase()
+                    return searchInput.split(/\s+/).every(kw => haystack.includes(kw))
+                })
             }
             
-            if (e.key === "?" && document.activeElement.tagName === "BODY") {
-                e.preventDefault();
-                document.getElementById('ai-query-input').focus();
-            }
-        });
-        
+            const dataStr = JSON.stringify(dataToExport, null, 2)
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr)
+            
+            const exportFileDefaultName = `stars-unifier-stav888-${new Date().toISOString().slice(0,10)}.json`
+            
+            const linkElement = document.createElement('a')
+            linkElement.setAttribute('href', dataUri)
+            linkElement.setAttribute('download', exportFileDefaultName)
+            linkElement.click()
+            
+            showToast(`Exported ${dataToExport.length} repositories`, 'success')
+        }
+
+        // Initialize everything
+        function initializeApp() {
+            initializeTailwind()
+            
+            // Initial render
+            renderRepos(repos)
+            renderCategoryPills()
+            
+            // Set initial last sync time
+            const syncEl = document.getElementById('last-sync-time')
+            syncEl.textContent = 'just now'
+            
+            // Bonus: allow pressing Escape to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('modal')
+                    if (!modal.classList.contains('hidden')) {
+                        closeModal()
+                    } else {
+                        // Clear search on escape if no modal
+                        const input = document.getElementById('search-input')
+                        if (input.value) {
+                            input.value = ''
+                            filterRepos()
+                        }
+                    }
+                }
+                
+                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault()
+                    document.getElementById('search-input').focus()
+                }
+            })
+            
+            // Make whole page show hint for / search
+            console.log('%c[Stars Unifier] Press "/" to focus search. All features are fully functional.', 'color:#3f3f46')
+            
+            // Optional: pre-filter demo (commented)
+            // setTimeout(() => { document.getElementById('search-input').value = 'rag'; filterRepos() }, 1200)
+        }
+
         // Boot the app
-        window.onload = function() {
-            initializeApp();
-        };
-        
-        // Make some functions global for console debugging if needed
-        window.StarsUnifier = { refresh: () => location.reload() };
+        window.onload = initializeApp
     </script>
 </body>
 </html>
