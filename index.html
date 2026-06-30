@@ -224,7 +224,7 @@
             <div>
                 <h2 class="section-header font-semibold tracking-tight flex items-center gap-3">
                     REPOSITORIES 
-                    <span class="text-base font-normal text-zinc-500">(108 repos)</span>
+                    <span id="repo-count" class="text-base font-normal text-zinc-500">(loading...)</span>
                 </h2>
                 <p class="text-sm text-zinc-400">Click any card for details • Semantic search enabled</p>
             </div>
@@ -417,6 +417,13 @@
             if (totalEl) totalEl.textContent = allGitHubRepos.length;
 
             // You can expand this to calculate top language etc. if wanted
+        }
+
+        function updateRepoCount() {
+            const countEl = document.getElementById('repo-count');
+            if (countEl && repos) {
+                countEl.textContent = `(${repos.length} repos)`;
+            }
         }
 
         let currentFilter = {
@@ -725,6 +732,7 @@
                 // Re-render UI with new data
                 renderRepos(repos);
                 renderCategoryPills();
+                updateRepoCount();
 
                 // Update last sync time
                 const syncEl = document.getElementById('last-sync-time');
@@ -802,6 +810,7 @@
             // Now render everything with the real data
             renderRepos(repos)
             renderCategoryPills()
+            updateRepoCount()
 
             // Bonus: allow pressing Escape to close modal
             document.addEventListener('keydown', function(e) {
