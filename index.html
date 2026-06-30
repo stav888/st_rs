@@ -151,7 +151,7 @@
             <div class="flex flex-col items-start lg:items-end gap-1 text-sm">
                 <div class="flex items-center gap-2 text-emerald-400">
                     <i class="fa-solid fa-satellite fa-fw"></i>
-                    <span class="font-medium">Synced with GitHub • 108 stars</span>
+                    <span id="synced-text" class="font-medium">Synced with GitHub • — stars</span>
                 </div>
                 <div class="text-zinc-500">
                     Last synced: <span id="last-sync-time" class="font-mono text-emerald-300">just now</span>
@@ -163,7 +163,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
             <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
                 <div class="flex items-baseline gap-2">
-                    <span class="text-5xl font-semibold stat-value">108</span>
+                    <span id="stat-total" class="text-5xl font-semibold stat-value">—</span>
                 </div>
                 <div class="text-zinc-400 mt-1 flex items-center gap-2">
                     <i class="fa-solid fa-star text-amber-400"></i>
@@ -173,7 +173,7 @@
             
             <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
                 <div class="flex items-baseline gap-2">
-                    <span class="text-5xl font-semibold stat-value">9</span>
+                    <span id="stat-categories" class="text-5xl font-semibold stat-value">—</span>
                 </div>
                 <div class="text-zinc-400 mt-1 flex items-center gap-2">
                     <i class="fa-solid fa-layer-group text-indigo-400"></i>
@@ -183,7 +183,7 @@
             
             <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
                 <div class="flex items-baseline gap-2">
-                    <span class="text-5xl font-semibold stat-value">Python</span>
+                    <span id="stat-toplang" class="text-5xl font-semibold stat-value">—</span>
                 </div>
                 <div class="text-zinc-400 mt-1 flex items-center gap-2">
                     <i class="fa-solid fa-code text-emerald-400"></i>
@@ -193,7 +193,7 @@
             
             <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5">
                 <div class="flex items-baseline gap-2">
-                    <span class="text-5xl font-semibold stat-value">32</span>
+                    <span id="stat-ai" class="text-5xl font-semibold stat-value">—</span>
                 </div>
                 <div class="text-zinc-400 mt-1 flex items-center gap-2">
                     <i class="fa-solid fa-robot text-violet-400"></i>
@@ -400,23 +400,81 @@
 
             } catch (error) {
                 console.error("Failed to fetch GitHub stars:", error);
+                
+                let errorMessage = `Could not load stars from GitHub.<br>Please check your connection or try again later.`;
+                
+                if (error.message.includes('403')) {
+                    errorMessage = `
+                        <strong>GitHub rate limit reached (403)</strong><br>
+                        You've hit the public API limit (60 requests/hour).<br><br>
+                        <span class="text-xs">Quick fix: Wait ~1 hour, or use a GitHub Personal Access Token (even without scopes) for 5,000 requests/hour.</span>
+                    `;
+                }
+                
                 document.getElementById('repo-grid').innerHTML = `
                     <div class="col-span-full text-center py-12 text-red-400">
                         <i class="fa-solid fa-exclamation-triangle text-3xl mb-3"></i>
-                        <p>Could not load stars from GitHub.<br>Please check your connection or try again later.</p>
-                        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-zinc-800 rounded-2xl text-sm">Retry</button>
+                        <p>${errorMessage}</p>
+                        <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm">Retry</button>
                     </div>
                 `;
+
+                // Reset synced text on error
+                const syncedText = document.getElementById('synced-text');
+                if (syncedText) syncedText.innerHTML = `Synced with GitHub • <span class="font-mono">—</span> stars`;
                 return [];
             }
         }
 
         function updateStats(allGitHubRepos) {
-            // Total stars
-            const totalEl = document.querySelector('.stat-value');
+            if (!allGitHubRepos || allGitHubRepos.length === 0) return;
+
+            // 1. Total Stars
+            const totalEl = document.getElementById('stat-total');
             if (totalEl) totalEl.textContent = allGitHubRepos.length;
 
-            // You can expand this to calculate top language etc. if wanted
+            // Update the small "Synced with GitHub • X stars" line
+            const syncedText = document.getElementById('synced-text');
+            if (syncedText) {
+                syncedText.innerHTML = `Synced with GitHub • <span class="font-mono">${allGitHubRepos.length}</span> stars`;
+            }
+
+            // 2. Categories count (unique)
+            const categories = new Set();
+            allGitHubRepos.forEach(r => {
+                const cat = categorizeRepo(r);
+                if (cat) categories.add(cat);
+            });
+            const catEl = document.getElementById('stat-categories');
+            if (catEl) catEl.textContent = categories.size;
+
+            // 3. Top Language
+            const langCount = {};
+            allGitHubRepos.forEach(r => {
+                const lang = r.language || 'N/A';
+                langCount[lang] = (langCount[lang] || 0) + 1;
+            });
+            let topLang = 'N/A';
+            let max = 0;
+            Object.keys(langCount).forEach(lang => {
+                if (langCount[lang] > max) {
+                    max = langCount[lang];
+                    topLang = lang;
+                }
+            });
+            const langEl = document.getElementById('stat-toplang');
+            if (langEl) langEl.textContent = topLang;
+
+            // 4. AI-Related count (rough but useful)
+            let aiCount = 0;
+            allGitHubRepos.forEach(r => {
+                const cat = categorizeRepo(r);
+                if (['AI Agents & Coding Assistants', 'LLM Tooling & Proxies', 'RAG & Semantic Search', 'AI Finance & Trading'].includes(cat)) {
+                    aiCount++;
+                }
+            });
+            const aiEl = document.getElementById('stat-ai');
+            if (aiEl) aiEl.textContent = aiCount;
         }
 
         function updateRepoCount() {
@@ -495,11 +553,30 @@
         function renderRepos(reposToShow) {
             const grid = document.getElementById('repo-grid')
             const noResults = document.getElementById('no-results')
+            const countEl = document.getElementById('repo-count')
             grid.innerHTML = ''
+
+            // Update the header count to reflect currently visible repos
+            if (countEl) {
+                if (reposToShow.length === repos.length) {
+                    countEl.textContent = `(${repos.length} repos)`;
+                } else {
+                    countEl.textContent = `(${reposToShow.length} / ${repos.length} repos)`;
+                }
+            }
 
             if (reposToShow.length === 0) {
                 grid.classList.add('hidden')
                 noResults.classList.remove('hidden')
+
+                // Don't show ugly "0 / 108" numbers when nothing matches
+                if (countEl) {
+                    if (reposToShow.length === 0 && repos.length > 0) {
+                        countEl.textContent = `(no matches)`;
+                    } else {
+                        countEl.textContent = ``;
+                    }
+                }
                 return
             } else {
                 grid.classList.remove('hidden')
